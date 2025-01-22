@@ -30,7 +30,9 @@ def t_tabela_processamentos(dados):
         "data_solicitacao",
         "data_transferencia"        
     ]
+    
     dados.columns = novos_nomes
+    dados["data_solicitacao"] = dados["data_solicitacao"].astype(str)
 
     nova_ordem = [
         "cod_xp",
