@@ -7,9 +7,9 @@ from auxiliares import (
 )
 
 
-def t_prod_estruturados(dados):
+def t_produtos_estruturados(dados):
     """
-    Realiza as transformações específicas no DataFrame da tabela `prod_estruturados`.
+    Realiza as transformações específicas no DataFrame da tabela `produtos_estruturados`.
 
     :param dados: DataFrame a ser transformado.
     :return: DataFrame transformado.
@@ -42,13 +42,13 @@ def t_prod_estruturados(dados):
     return dados
 
 
-def processar_tabela_prod_estruturados(dados):
+def processar_tabela_produtos_estruturados(dados):
     """
-    Função principal que processa os dados da tabela `prod_estruturados`.
+    Função principal que processa os dados da tabela `produtos_estruturados`.
 
     :param dados: DataFrame recebido diretamente do nó KNIME.
     :return: DataFrame processado.
     """
     # Chama a função de processamento principal
-    dados_processados = t_prod_estruturados(dados)
+    dados_processados = t_produtos_estruturados(dados)
     return dados_processados

@@ -7,7 +7,7 @@ from auxiliares import (
 )
 
 
-def t_cambio(dados):
+def t_cambio_att(dados):
     """
     Função que realiza as transformações específicas no DataFrame de câmbio.
     :param dados: DataFrame a ser transformado.
@@ -71,12 +71,12 @@ def t_cambio(dados):
     return dados
 
 
-def processar_tabela_cambio(dados):
+def processar_tabela_cambio_att(dados):
     """
     Função principal que processa os dados da tabela de câmbio.
     :param dados: DataFrame recebido diretamente.
     :return: DataFrame processado.
     """
     # Chama a função de processamento principal
-    dados_processados = t_cambio(dados)
+    dados_processados = t_cambio_att(dados)
     return dados_processados
