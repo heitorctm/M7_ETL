@@ -58,7 +58,7 @@ def t_tabela_processamentos(dados):
         dados, colunas_not_varchar=["data_solicitacao"]
     )
 
-    
+    dados["data_solicitacao"] = dados["data_solicitacao"].astype(str)
 
 
     return dados
