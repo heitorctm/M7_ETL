@@ -50,7 +50,7 @@ def t_tabela_processamentos(dados):
     dados = formatar_colunas_data_transf(
         dados, colunas_not_varchar=["data_transferencia"]
     )
-
+    dados["data_solicitacao"] = dados["data_solicitacao"].astype(str)
 
     dados = remover_hifen(dados, ["cod_aai", "cod_aai_destino"])
 
