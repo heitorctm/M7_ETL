@@ -13,9 +13,7 @@ def t_tabela_processamentos(dados):
     :param dados: DataFrame a ser transformado.
     :return: DataFrame transformado.
     """
-    # Remove as colunas indesejadas
-    print(1)
-    print(dados.head(1))
+
     colunas_a_remover = [
         "Nome Assessor Origem",
         "Nome Assessor Destino",
@@ -23,9 +21,7 @@ def t_tabela_processamentos(dados):
         "Código Solicitação",
     ]
     dados = dados.drop(columns=colunas_a_remover)
-    print(2)
-    print(dados.head(1))
-    # Renomeia as colunas
+
     novos_nomes = [
         "status",
         "cod_xp",
@@ -47,28 +43,19 @@ def t_tabela_processamentos(dados):
     dados = dados[nova_ordem]
 
 
-    print(3)
-    print(dados.head(1))
-
-    # Formata as colunas de data
     dados = formatar_colunas_data_transf(
         dados, colunas_not_varchar=["data_solicitacao"]
     )
-    print(4)
-    print(dados.head(1))
+
     dados = formatar_colunas_data_transf(
         dados, colunas_not_varchar=["data_transferencia"]
     )
-    print(5)
-    print(dados.head(1))
 
-    # Remove hífens e adiciona aspas duplas
+
     dados = remover_hifen(dados, ["cod_aai", "cod_aai_destino"])
-    print(6)
-    print(dados.head(1))
+    dados["data_solicitacao"] = dados["data_solicitacao"].astype(str)
     dados = adicionando_aspas_duplas(dados, ["none"])
-    print(7)
-    print(dados.head(1))
+
     return dados
 
 
