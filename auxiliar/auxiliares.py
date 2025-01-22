@@ -1,6 +1,5 @@
 import pandas as pd
 from datetime import datetime
-import os
 import boto3
 from botocore.exceptions import ClientError
 import shutil
@@ -9,6 +8,8 @@ import time
 import asyncio
 import urllib.request
 import json
+import os
+import shutil 
 
 
 def acessar_s3():
@@ -81,10 +82,6 @@ def mover_arquivos_para_pasta(s3, bucket, pasta_origem, pasta_destino):
         print(f"Erro ao mover arquivos: {e}")
     except Exception as e:
         print(f"Erro inesperado: {e}")
-
-
-import os
-import shutil  # Para mover os arquivos
 
 
 def mover_xperformance_s3(pasta_local, bucket, pasta_destino, s3):
@@ -216,6 +213,7 @@ def formatar_colunas_data_transf(df, colunas_not_varchar):
 
             # Aplica a função de processamento para cada registro na coluna
             df[col] = df[col].apply(processar_valor)
+            df[col] = df[col].astype(str)
     return df
 
 def formatar_colunas_data_positivador(df, colunas_not_varchar=["data_ref"]):
