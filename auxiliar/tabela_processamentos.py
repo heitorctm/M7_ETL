@@ -6,7 +6,7 @@ from auxiliares import (
 )
 
 
-def t_processamentos(dados):
+def t_tabela_processamentos(dados):
     """
     Realiza as transformações específicas no DataFrame da tabela `processamentos`.
 
@@ -56,5 +56,5 @@ def processar_tabela_processamentos(dados):
     :return: DataFrame processado.
     """
     # Chama a função de processamento principal
-    dados_processados = t_processamentos(dados)
+    dados_processados = t_tabela_processamentos(dados)
     return dados_processados
