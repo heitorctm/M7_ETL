@@ -30,7 +30,7 @@ def t_tabela_processamentos(dados):
         "status",
         "cod_xp",
         "cod_aai",
-        "cod_aai_destinho",
+        "cod_aai_destino",
         "data_solicitacao",
         "data_transferencia"        
     ]
@@ -39,7 +39,7 @@ def t_tabela_processamentos(dados):
     nova_ordem = [
         "cod_xp",
         "cod_aai",
-        "cod_aai_destinho",
+        "cod_aai_destino",
         "data_solicitacao",
         "data_transferencia",
         "status"   
@@ -63,7 +63,7 @@ def t_tabela_processamentos(dados):
     print(dados.head(1))
 
     # Remove hífens e adiciona aspas duplas
-    dados = remover_hifen(dados, ["cod_aai", "cod_aai_destinho"])
+    dados = remover_hifen(dados, ["cod_aai", "cod_aai_destino"])
     print(6)
     print(dados.head(1))
     dados = adicionando_aspas_duplas(dados, ["none"])
