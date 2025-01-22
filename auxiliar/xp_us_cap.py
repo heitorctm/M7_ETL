@@ -1,21 +1,21 @@
-from .auxiliares import (
+from auxiliares import (
     consulta_bc,
-    acessar_s3,
     truncar_2_casas,
-    mover_arquivo,
     remover_linhas_sem_data,
     remover_letras_coluna,
     formatar_colunas_data,
     adicionando_aspas_duplas,
-    salvar_csv,
-    carregar_arquivo,
-    inserir_arquivo_no_s3,
 )
-import pandas as pd
 
 
-def t_xpus_cap_s3(dados, path_do_arquivo):
+def t_xpus_cap(dados):
+    """
+    Realiza as transformações específicas no DataFrame da tabela `xpus_cap`.
 
+    :param dados: DataFrame a ser transformado.
+    :return: DataFrame transformado.
+    """
+    # Define a nova ordem das colunas
     nova_ordem_colunas = [
         "Date",
         "Código da Conta Offshore PWM",
@@ -27,34 +27,43 @@ def t_xpus_cap_s3(dados, path_do_arquivo):
 
     dados = dados[nova_ordem_colunas]
 
+    # Renomeia as colunas
     novo_nome_colunas = ["data_ref", "cod_us", "cod_xp", "tipo", "captacao", "cod_aai"]
-
     dados = dados.rename(columns=dict(zip(dados.columns, novo_nome_colunas)))
+
+    # Remove linhas sem data
     dados = remover_linhas_sem_data(dados)
+
+    # Formata a coluna de data
     dados = formatar_colunas_data(dados, colunas_not_varchar=["data_ref"])
+
+    # Consulta o fator do Banco Central e ajusta os valores de captação
     dados["Fator BC"] = dados["data_ref"].apply(
         lambda date: consulta_bc(date.strftime("%d/%m/%Y"))
     )
     dados["captacao"] = pd.to_numeric(dados["captacao"], errors="coerce")
     dados["captacao"] = dados["captacao"] * dados["Fator BC"]
+
+    # Remove a coluna auxiliar "Fator BC"
     dados = dados.drop(columns=["Fator BC"])
+
+    # Remove letras da coluna de códigos e trunca valores
     dados = remover_letras_coluna(dados, coluna="cod_aai")
     dados = truncar_2_casas(dados, colunas=["captacao"])
+
+    # Adiciona aspas duplas às colunas especificadas
     dados = adicionando_aspas_duplas(dados, colunas_not_varchar=["data_ref"])
-    path = salvar_csv(dados, path_do_arquivo)
 
-    return path
+    return dados
 
 
-def load_xpus_cap_s3(path_do_arquivo, nome_base="xpus_cap", bucket="m7investimentos"):
+def processar_tabela_xpus_cap(dados):
+    """
+    Função principal que processa os dados da tabela `xpus_cap`.
 
-    pasta_destino = "../../BASE/7 - xpus_cap/processado/"
-    dados = carregar_arquivo(path_do_arquivo)
-    if dados is None:
-        print("nao tem o arquivo")
-        return True
-    path = t_xpus_cap_s3(dados, path_do_arquivo)
-    # mover_arquivo(path=path_do_arquivo, pasta_destino=pasta_destino)
-    s3 = acessar_s3()
-    inserir_arquivo_no_s3(nome_base, path, s3, bucket)
-    # mover_arquivo(path=path, pasta_destino=pasta_destino)
+    :param dados: DataFrame recebido diretamente do nó KNIME.
+    :return: DataFrame processado.
+    """
+    # Chama a função de processamento principal
+    dados_processados = t_xpus_cap(dados)
+    return dados_processados

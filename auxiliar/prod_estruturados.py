@@ -1,21 +1,23 @@
-from .auxiliares import (
-    acessar_s3,
+from auxiliares import (
     truncar_2_casas,
-    mover_arquivo,
     remover_linhas_sem_data,
     remover_letras_coluna,
     formatar_colunas_data,
     adicionando_aspas_duplas,
-    salvar_csv,
-    carregar_arquivo,
-    inserir_arquivo_no_s3,
 )
 
 
-def t_prod_estruturados_s3(dados, path_do_arquivo):
+def t_prod_estruturados(dados):
+    """
+    Realiza as transformações específicas no DataFrame da tabela `prod_estruturados`.
 
+    :param dados: DataFrame a ser transformado.
+    :return: DataFrame transformado.
+    """
+    # Adiciona a coluna de referência de data
     dados["data_ref"] = dados["Data"]
 
+    # Define a nova ordem de colunas
     nova_ordem_colunas = [
         "data_ref",
         "Cliente",
@@ -30,27 +32,23 @@ def t_prod_estruturados_s3(dados, path_do_arquivo):
     ]
     dados = dados[nova_ordem_colunas]
 
+    # Aplica as transformações
     dados = remover_linhas_sem_data(dados)
     dados = remover_letras_coluna(dados, coluna="Cod A")
     dados = formatar_colunas_data(dados, colunas_not_varchar=["data_ref", "Data"])
     dados = truncar_2_casas(dados, colunas=["Comissão"])
     dados = adicionando_aspas_duplas(dados, colunas_not_varchar=["data_ref"])
-    path = salvar_csv(dados, path_do_arquivo)
 
-    return path
+    return dados
 
 
-def load_prod_estruturados_s3(
-    path_do_arquivo, nome_base="produtos_estruturados", bucket="m7investimentos"
-):
+def processar_tabela_prod_estruturados(dados):
+    """
+    Função principal que processa os dados da tabela `prod_estruturados`.
 
-    pasta_destino = "../../BASE/3 - prod_estruturados/processado/"
-    dados = carregar_arquivo(path_do_arquivo)
-    if dados is None:
-        print("nao tem o arquivo")
-        return True
-    path = t_prod_estruturados_s3(dados, path_do_arquivo)
-    # mover_arquivo(path=path_do_arquivo, pasta_destino=pasta_destino)
-    s3 = acessar_s3()
-    inserir_arquivo_no_s3(nome_base, path, s3, bucket)
-    # mover_arquivo(path=path, pasta_destino=pasta_destino)
+    :param dados: DataFrame recebido diretamente do nó KNIME.
+    :return: DataFrame processado.
+    """
+    # Chama a função de processamento principal
+    dados_processados = t_prod_estruturados(dados)
+    return dados_processados

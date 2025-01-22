@@ -1,19 +1,19 @@
 from .auxiliares import (
-    acessar_s3,
     deletar_4_ultimas_colunas,
-    mover_arquivo,
     remover_linhas_sem_data,
     remover_letras_coluna,
-    formatar_colunas_data,
     adicionando_aspas_duplas,
-    salvar_csv,
-    carregar_arquivo,
-    inserir_arquivo_no_s3,
     remover_linhas_nan,
 )
 
 
-def t_analitico_rf_s3(dados, path_do_arquivo):
+def t_analitico_rf(dados):
+    """
+    Função que realiza as transformações específicas no dataframe.
+    :param dados: DataFrame a ser transformado.
+    :return: DataFrame transformado.
+    """
+    # Define os campos e reorganiza as colunas
     campos = [
         "Date",
         "Código Assessor",
@@ -33,9 +33,9 @@ def t_analitico_rf_s3(dados, path_do_arquivo):
         "Indexador",
         "Quantidade Operação",
     ]
-
     dados = dados[campos]
 
+    # Renomeia as colunas
     novo_nome_colunas = [
         "data_ref",
         "cod_aai",
@@ -51,29 +51,30 @@ def t_analitico_rf_s3(dados, path_do_arquivo):
         "preco_unitario",
         "preco_tmr",
     ]
-
     dados = dados.rename(columns=dict(zip(dados.columns, novo_nome_colunas)))
+
+    # Remove linhas sem data e colunas nulas
     dados = remover_linhas_sem_data(dados)
     dados = remover_linhas_nan(dados, coluna="cod_xp")
+
+    # Remove letras de colunas específicas
     dados = remover_letras_coluna(dados)
+
+    # Adiciona aspas duplas em colunas não varchar
     dados = adicionando_aspas_duplas(dados, colunas_not_varchar=["data_ref"])
+
+    # Remove as 4 últimas colunas
     dados = deletar_4_ultimas_colunas(dados)
-    path = salvar_csv(dados, path_do_arquivo)
 
-    return path
+    return dados
 
 
-def load_analitico_rf_s3(
-    path_do_arquivo, nome_base="analitico_rf", bucket="m7investimentos"
-):
-
-    pasta_destino = "../../BASE/8 - analitico/processado/"
-    dados = carregar_arquivo(path_do_arquivo)
-    if dados is None:
-        print("nao tem o arquivo")
-        return True
-    path = t_analitico_rf_s3(dados, path_do_arquivo)
-    # mover_arquivo(path=path_do_arquivo, pasta_destino=pasta_destino)
-    s3 = acessar_s3()
-    inserir_arquivo_no_s3(nome_base, path, s3, bucket)
-    # mover_arquivo(path=path, pasta_destino=pasta_destino)
+def processar_tabela_analitico_rf(dados):
+    """
+    Função principal que processa os dados da tabela.
+    :param dados: DataFrame recebido diretamente.
+    :return: DataFrame processado.
+    """
+    # Chama a função de processamento principal
+    dados_processados = t_analitico_rf(dados)
+    return dados_processados

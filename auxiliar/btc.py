@@ -1,21 +1,20 @@
-from .auxiliares import (
-    acessar_s3,
-    truncar_2_casas,
-    mover_arquivo,
+from auxiliares import (
     remover_linhas_sem_data,
     remover_letras_coluna,
-    formatar_colunas_data,
     adicionando_aspas_duplas,
-    salvar_csv,
-    carregar_arquivo,
-    inserir_arquivo_no_s3,
 )
 
 
-def t_btc_s3(dados, path_do_arquivo):
-
+def t_btc(dados):
+    """
+    Função que realiza as transformações específicas no DataFrame de BTC.
+    :param dados: DataFrame a ser transformado.
+    :return: DataFrame transformado.
+    """
+    # Adiciona a coluna 'data_ref' com base na coluna 'Data'
     dados["data_ref"] = dados["Data"]
 
+    # Define a nova ordem das colunas
     nova_ordem_colunas = [
         "data_ref",
         "Cliente",
@@ -33,27 +32,22 @@ def t_btc_s3(dados, path_do_arquivo):
     ]
     dados = dados[nova_ordem_colunas]
 
+    # Aplica as transformações
     dados = remover_linhas_sem_data(dados)
     dados = remover_letras_coluna(dados, coluna="Cod A")
-    # dados = truncar_2_casas(dados, colunas=['Financeiro', 'Receita'])
     dados = adicionando_aspas_duplas(
         dados, colunas_not_varchar=["data_ref", "Data", "Abertura", "Vencimento"]
     )
 
-    path = salvar_csv(dados, path_do_arquivo)
-
-    return path
+    return dados
 
 
-def load_btc_s3(path_do_arquivo, nome_base="btc", bucket="m7investimentos"):
-
-    pasta_destino = "../../BASE/2 - btc/processado/"
-    dados = carregar_arquivo(path_do_arquivo)
-    if dados is None:
-        print("nao tem o arquivo")
-        return True
-    path = t_btc_s3(dados, path_do_arquivo)
-    # mover_arquivo(path=path_do_arquivo, pasta_destino=pasta_destino)
-    s3 = acessar_s3()
-    inserir_arquivo_no_s3(nome_base, path, s3, bucket)
-    # mover_arquivo(path=path, pasta_destino=pasta_destino)
+def processar_tabela_btc(dados):
+    """
+    Função principal que processa os dados da tabela BTC.
+    :param dados: DataFrame recebido diretamente.
+    :return: DataFrame processado.
+    """
+    # Chama a função de processamento principal
+    dados_processados = t_btc(dados)
+    return dados_processados

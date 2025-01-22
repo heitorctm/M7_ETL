@@ -1,16 +1,19 @@
-from .auxiliares import (
-    acessar_s3,
+from auxiliares import (
     salvar_csv,
-    carregar_arquivo,
-    inserir_arquivo_no_s3,
     remover_hifen,
     adicionando_aspas_duplas,
     formatar_colunas_data_transf,
 )
 
 
-def t_processamentos_s3(dados, path_do_arquivo):
+def t_processamentos(dados):
+    """
+    Realiza as transformações específicas no DataFrame da tabela `processamentos`.
 
+    :param dados: DataFrame a ser transformado.
+    :return: DataFrame transformado.
+    """
+    # Remove as colunas indesejadas
     colunas_a_remover = [
         "Nome Assessor Origem",
         "Nome Assessor Destino",
@@ -18,8 +21,8 @@ def t_processamentos_s3(dados, path_do_arquivo):
         "Código Solicitação",
     ]
     dados = dados.drop(columns=colunas_a_remover)
-    print(dados.head(3))
 
+    # Renomeia as colunas
     novos_nomes = [
         "cod_xp",
         "cod_aai",
@@ -30,6 +33,7 @@ def t_processamentos_s3(dados, path_do_arquivo):
     ]
     dados.columns = novos_nomes
 
+    # Formata as colunas de data
     dados = formatar_colunas_data_transf(
         dados, colunas_not_varchar=["data_solicitacao"]
     )
@@ -37,25 +41,20 @@ def t_processamentos_s3(dados, path_do_arquivo):
         dados, colunas_not_varchar=["data_transferencia"]
     )
 
+    # Remove hífens e adiciona aspas duplas
     dados = remover_hifen(dados, ["cod_aai", "cod_aai_destinho"])
     dados = adicionando_aspas_duplas(dados, ["none"])
 
-    path = salvar_csv(dados, path_do_arquivo)
-
-    return path
+    return dados
 
 
-def load_processamentos_s3(
-    path_do_arquivo, nome_base="tabela_processamentos", bucket="m7investimentos"
-):
+def processar_tabela_processamentos(dados):
+    """
+    Função principal que processa os dados da tabela `processamentos`.
 
-    pasta_destino = "../../BASE/11 - tabela_processamentos/processado/"
-    dados = carregar_arquivo(path_do_arquivo)
-    if dados is None:
-        print("nao tem o arquivo")
-        return True
-    path = t_processamentos_s3(dados, path_do_arquivo)
-    # mover_arquivo(path=path_do_arquivo, pasta_destino=pasta_destino)
-    s3 = acessar_s3()
-    inserir_arquivo_no_s3(nome_base, path, s3, bucket)
-    # mover_arquivo(path=path, pasta_destino=pasta_destino)
+    :param dados: DataFrame recebido diretamente do nó KNIME.
+    :return: DataFrame processado.
+    """
+    # Chama a função de processamento principal
+    dados_processados = t_processamentos(dados)
+    return dados_processados

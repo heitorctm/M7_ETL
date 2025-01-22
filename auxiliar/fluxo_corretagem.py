@@ -1,18 +1,18 @@
-from .auxiliares import (
-    acessar_s3,
-    mover_arquivo,
+from auxiliares import (
     remover_linhas_sem_data,
     remover_letras_coluna,
-    formatar_colunas_data,
     adicionando_aspas_duplas,
-    salvar_csv,
-    carregar_arquivo,
-    inserir_arquivo_no_s3,
 )
 
 
-def t_fluxo_corretagem_s3(dados, path_do_arquivo):
+def t_fluxo_corretagem(dados):
+    """
+    Realiza as transformações específicas no DataFrame da tabela `fluxo_corretagem`.
 
+    :param dados: DataFrame a ser transformado.
+    :return: DataFrame transformado.
+    """
+    # Define as colunas na nova ordem
     colunas_nova_ordem = [
         "Data",
         "Cod A",
@@ -29,9 +29,9 @@ def t_fluxo_corretagem_s3(dados, path_do_arquivo):
         "Mercado",
         "Lado",
     ]
-
     dados = dados[colunas_nova_ordem]
 
+    # Renomeia as colunas
     novo_nome_colunas = [
         "data_ref",
         "cod_aai",
@@ -49,25 +49,22 @@ def t_fluxo_corretagem_s3(dados, path_do_arquivo):
         "lado",
     ]
     dados = dados.rename(columns=dict(zip(dados.columns, novo_nome_colunas)))
+
+    # Aplica as transformações
     dados = remover_linhas_sem_data(dados, colunas=["data_ref"])
     dados = remover_letras_coluna(dados)
     dados = adicionando_aspas_duplas(dados, colunas_not_varchar=["data_ref"])
-    path = salvar_csv(dados, path_do_arquivo)
 
-    return path
+    return dados
 
 
-def load_fluxo_corretagem_s3(
-    path_do_arquivo, nome_base="fluxo_corretagem", bucket="m7investimentos"
-):
+def processar_tabela_fluxo_corretagem(dados):
+    """
+    Função principal que processa os dados da tabela `fluxo_corretagem`.
 
-    pasta_destino = "../../BASE/10 - fluxo_corretagem/processado/"
-    dados = carregar_arquivo(path_do_arquivo)
-    if dados is None:
-        print("nao tem o arquivo")
-        return True
-    path = t_fluxo_corretagem_s3(dados, path_do_arquivo)
-    # mover_arquivo(path=path_do_arquivo, pasta_destino=pasta_destino)
-    s3 = acessar_s3()
-    inserir_arquivo_no_s3(nome_base, path, s3, bucket)
-    # mover_arquivo(path=path, pasta_destino=pasta_destino)
+    :param dados: DataFrame recebido diretamente do nó KNIME.
+    :return: DataFrame processado.
+    """
+    # Chama a função de processamento principal
+    dados_processados = t_fluxo_corretagem(dados)
+    return dados_processados

@@ -1,18 +1,18 @@
-from .auxiliares import (
-    acessar_s3,
+from auxiliares import (
     truncar_2_casas,
-    mover_arquivo,
     remover_linhas_sem_data,
     remover_letras_coluna,
     adicionando_aspas_duplas_positivador,
-    salvar_csv,
-    carregar_arquivo,
-    inserir_arquivo_no_s3,
 )
 
 
-def t_diversificacao_s3(dados, path_do_arquivo):
-
+def t_diversificacao(dados):
+    """
+    Função que realiza as transformações específicas no dataframe.
+    :param dados: DataFrame a ser transformado.
+    :return: DataFrame transformado.
+    """
+    # Reorganiza as colunas na ordem desejada
     nova_ordem_colunas = [
         "Data Posição",
         "Assessor",
@@ -27,14 +27,24 @@ def t_diversificacao_s3(dados, path_do_arquivo):
         "Quantidade",
         "NET",
     ]
-
     dados = dados[nova_ordem_colunas]
+
+    # Renomeia colunas
     dados = dados.rename(columns={"Data Posição": "data_ref"})
+
+    # Adiciona uma nova coluna de teste
     dados["teste"] = 1
+
+    # Remove linhas sem data
     dados = remover_linhas_sem_data(dados)
 
+    # Remove letras de uma coluna específica
     dados = remover_letras_coluna(dados, coluna="Assessor")
+
+    # Trunca valores em 2 casas decimais
     dados = truncar_2_casas(dados, colunas=["NET"])
+
+    # Aplica tratamento para codificação de strings
     dados = dados.applymap(
         lambda x: (
             str(x).encode("latin-1", errors="ignore").decode("latin-1")
@@ -42,25 +52,21 @@ def t_diversificacao_s3(dados, path_do_arquivo):
             else x
         )
     )
+
+    # Adiciona aspas duplas em colunas não varchar
     dados = adicionando_aspas_duplas_positivador(
         dados, colunas_not_varchar=["data_ref"]
     )
-    path = salvar_csv(dados, path_do_arquivo)
 
-    return path
+    return dados
 
 
-def load_diversificacao_s3(
-    path_do_arquivo, nome_base="diversificacao", bucket="m7investimentos"
-):
-
-    pasta_destino = "../../BASE/0.1 - diversificacao/processado/"
-    dados = carregar_arquivo(path_do_arquivo)
-    if dados is None:
-        print("nao tem o arquivo")
-        return True
-    path = t_diversificacao_s3(dados, path_do_arquivo)
-    # mover_arquivo(path=path_do_arquivo, pasta_destino=pasta_destino)
-    s3 = acessar_s3()
-    inserir_arquivo_no_s3(nome_base, path, s3, bucket)
-    # mover_arquivo(path=path, pasta_destino=pasta_destino)
+def processar_tabela_diversificacao(dados):
+    """
+    Função principal que processa os dados da tabela.
+    :param dados: DataFrame recebido diretamente.
+    :return: DataFrame processado.
+    """
+    # Chama a função de processamento principal
+    dados_processados = t_diversificacao(dados)
+    return dados_processados

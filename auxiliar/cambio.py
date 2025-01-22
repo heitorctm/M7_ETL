@@ -1,19 +1,19 @@
-from .auxiliares import (
-    acessar_s3,
+from auxiliares import (
     remover_linhas_nan,
     truncar_2_casas,
-    mover_arquivo,
     remover_linhas_sem_data,
     formatar_colunas_data,
     adicionando_aspas_duplas,
-    salvar_csv,
-    carregar_arquivo,
-    inserir_arquivo_no_s3,
 )
 
 
-def t_cambio_s3(dados, path_do_arquivo):
-
+def t_cambio(dados):
+    """
+    Função que realiza as transformações específicas no DataFrame de câmbio.
+    :param dados: DataFrame a ser transformado.
+    :return: DataFrame transformado.
+    """
+    # Define as colunas utilizadas no processamento
     colunas = [
         "Data",
         "Código Cliente",
@@ -29,9 +29,9 @@ def t_cambio_s3(dados, path_do_arquivo):
         "DT_MN_CLI",
         "DT_ME_CLI",
     ]
-
     dados = dados[colunas]
 
+    # Define a nova ordem das colunas e renomeia
     colunas_nova_ordem = [
         "data_ref",
         "cod_xp",
@@ -47,10 +47,10 @@ def t_cambio_s3(dados, path_do_arquivo):
         "DT_MN_CLI",
         "DT_ME_CLI",
     ]
-
     dados = dados.rename(columns=dict(zip(dados.columns, colunas_nova_ordem)))
-    dados = remover_linhas_nan(dados, coluna="cod_xp")
 
+    # Aplica as transformações no DataFrame
+    dados = remover_linhas_nan(dados, coluna="cod_xp")
     dados = formatar_colunas_data(
         dados, colunas_not_varchar=["data_ref", "DT_MN_CLI", "DT_ME_CLI"]
     )
@@ -67,19 +67,16 @@ def t_cambio_s3(dados, path_do_arquivo):
         ],
     )
     dados = adicionando_aspas_duplas(dados, colunas_not_varchar=["data_ref"])
-    path = salvar_csv(dados, path_do_arquivo)
 
-    return path
+    return dados
 
 
-def load_cambio_s3(path_do_arquivo, nome_base="cambio_att", bucket="m7investimentos"):
-    pasta_destino = "../../BASE/4 - cambio/processado/"
-    dados = carregar_arquivo(path_do_arquivo)
-    if dados is None:
-        print("nao tem o arquivo")
-        return True
-    path = t_cambio_s3(dados, path_do_arquivo)
-    # mover_arquivo(path=path_do_arquivo, pasta_destino=pasta_destino)
-    s3 = acessar_s3()
-    inserir_arquivo_no_s3(nome_base, path, s3, bucket)
-    # mover_arquivo(path=path, pasta_destino=pasta_destino)
+def processar_tabela_cambio(dados):
+    """
+    Função principal que processa os dados da tabela de câmbio.
+    :param dados: DataFrame recebido diretamente.
+    :return: DataFrame processado.
+    """
+    # Chama a função de processamento principal
+    dados_processados = t_cambio(dados)
+    return dados_processados
