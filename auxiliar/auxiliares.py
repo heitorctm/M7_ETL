@@ -203,17 +203,12 @@ def formatar_colunas_data(df, colunas_not_varchar=["data_ref"]):
 def formatar_colunas_data_transf(df, colunas_not_varchar):
     for col in colunas_not_varchar:
         if col in df.columns:
-            # Remover as horas antes de qualquer conversão
             df[col] = df[col].str.split(" ").str[0]
 
-            # Converter para o formato dd/mm/yyyy primeiro
             df[col] = pd.to_datetime(df[col], format="%d/%m/%Y", errors="coerce")
 
-            # Converter para o formato final yyyy-mm-dd
             df[col] = df[col].dt.strftime("%Y-%m-%d")
 
-            # Substituir valores inválidos por None
-            df[col] = df[col].where(df[col].notna(), None)
     return df
 
 
