@@ -1,4 +1,4 @@
-from .auxiliares import (
+from auxiliares import (
     deletar_4_ultimas_colunas,
     remover_linhas_sem_data,
     remover_letras_coluna,
