@@ -40,11 +40,13 @@ def t_tabela_processamentos(dados):
     dados = formatar_colunas_data_transf(
         dados, colunas_not_varchar=["data_transferencia"]
     )
+    print(dados.head(1))
 
     # Remove hífens e adiciona aspas duplas
     dados = remover_hifen(dados, ["cod_aai", "cod_aai_destinho"])
+    print(dados.head(1))
     dados = adicionando_aspas_duplas(dados, ["none"])
-
+    print(dados.head(1))
     return dados
 
 
