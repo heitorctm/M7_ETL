@@ -14,63 +14,43 @@ def t_tabela_processamentos(dados):
     :param dados: DataFrame a ser transformado.
     :return: DataFrame transformado.
     """
+    # Mapeia as colunas originais para os novos nomes
+    mapeamento_colunas = {
+        "Status": "status",
+        "Código Assessor Origem": "cod_xp",
+        "Código Assessor Destino": "cod_aai",
+        "Data Solicitação": "data_solicitacao",
+        "Data Transferência": "data_transferencia",
+        "Código do Cliente": "cod_aai_destino",
+    }
 
-    colunas_a_ficar = [
-        "Status",
-        "Código Assessor Origem",
-        "Código Assessor Destino",
-        
-        "Data Solicitação",
-        "Data Transferência",
-        "Código do Cliente",
-    ]
-    dados = dados[colunas_a_ficar]
-    print(dados.head(1))
+    # Filtra as colunas necessárias
+    dados = dados[list(mapeamento_colunas.keys())]
 
-    novos_nomes = [
-        "status",
-        "cod_xp",
-        "cod_aai",
-        "cod_aai_destino",
-        "data_solicitacao",
-        "data_transferencia"        
-    ]
-    
-    dados.columns = novos_nomes
-    dados = remover_hifen(dados, ["cod_aai"])
+    # Renomeia as colunas usando o mapeamento
+    dados = dados.rename(columns=mapeamento_colunas)
+
+    # Reorganiza na ordem desejada
     nova_ordem = [
         "cod_xp",
         "cod_aai",
         "cod_aai_destino",
         "data_solicitacao",
         "data_transferencia",
-        "status"   
+        "status",
     ]
     dados = dados[nova_ordem]
 
+    # Remove hifens
+    dados = remover_hifen(dados, ["cod_aai"])
 
-
+    # Formata as colunas de data
     dados = formatar_colunas_data_transf(
         dados, colunas_not_varchar=["data_transferencia"]
     )
-
     dados = formatar_colunas_data_transf(
         dados, colunas_not_varchar=["data_solicitacao"]
     )
 
-    dados["data_solicitacao"] = dados["data_solicitacao"].astype(str)
-
-
     return dados
 
-
-def processar_tabela_processamentos(dados):
-    """
-    Função principal que processa os dados da tabela `processamentos`.
-
-    :param dados: DataFrame recebido diretamente do nó KNIME.
-    :return: DataFrame processado.
-    """
-    # Chama a função de processamento principal
-    dados_processados = t_tabela_processamentos(dados)
-    return dados_processados
