@@ -30,18 +30,6 @@ def t_tabela_processamentos(dados):
     # Renomeia as colunas usando o mapeamento
     dados = dados.rename(columns=mapeamento_colunas)
 
-    # # Reorganiza na ordem desejada
-    # nova_ordem = [
-    #     "cod_xp",
-    #     "cod_aai",
-    #     "cod_aai_destino",
-    #     "data_solicitacao",
-    #     "data_transferencia",
-    #     "status",
-    # ]
-    # dados = dados[nova_ordem]
-
-    # Remove hifens
     dados = remover_hifen(dados, ["cod_aai"])
 
     # Formata as colunas de data
