@@ -34,8 +34,6 @@ def t_tabela_processamentos(dados):
     
     dados.columns = novos_nomes
 
-    adicionar_hifen_colunas_vazias(dados, novos_nomes)
-
     nova_ordem = [
         "cod_xp",
         "cod_aai",
