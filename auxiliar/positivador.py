@@ -1,4 +1,4 @@
-from auxiliar.auxiliares import (
+from auxiliares import (
     truncar_2_casas,
     remover_letras_coluna,
     formatar_colunas_data_positivador,
