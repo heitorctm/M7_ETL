@@ -35,6 +35,18 @@ def t_tabela_processamentos(dados):
         "data_transferencia"        
     ]
     dados.columns = novos_nomes
+
+    nova_ordem = [
+        "cod_xp",
+        "cod_aai",
+        "cod_aai_destinho",
+        "data_solicitacao",
+        "data_transferencia",
+        "status"   
+    ]
+    dados = dados[nova_ordem]
+
+
     print(3)
     print(dados.head(1))
 
