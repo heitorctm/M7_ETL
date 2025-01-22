@@ -22,6 +22,7 @@ def t_tabela_processamentos(dados):
         "Código Solicitação",
     ]
     dados = dados.drop(columns=colunas_a_remover)
+    print(dados.head(1))
 
     novos_nomes = [
         "status",
@@ -34,15 +35,7 @@ def t_tabela_processamentos(dados):
     
     dados.columns = novos_nomes
     dados = remover_hifen(dados, ["cod_aai"])
-    nova_ordem = [
-        "cod_xp",
-        "cod_aai",
-        "cod_aai_destino",
-        "data_solicitacao",
-        "data_transferencia",
-        "status"   
-    ]
-    dados = dados[nova_ordem]
+
 
 
 
