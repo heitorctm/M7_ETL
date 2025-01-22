@@ -203,12 +203,13 @@ def formatar_colunas_data(df, colunas_not_varchar=["data_ref"]):
 def formatar_colunas_data_transf(df, colunas_not_varchar):
     for col in colunas_not_varchar:
         if col in df.columns:
+            # Aplica transformação apenas em valores não nulos ou não vazios
             df[col] = df[col].apply(
                 lambda x: pd.to_datetime(x, format="%d/%m/%Y", errors="coerce").strftime("%Y-%m-%d")
-                if pd.notnull(x) and pd.to_datetime(x, format="%d/%m/%Y", errors="coerce") is not pd.NaT
-                else x  # Mantém o valor original se for vazio ou nulo
+                if pd.notnull(x) and x != '' else x
             )
     return df
+
 
 
 
