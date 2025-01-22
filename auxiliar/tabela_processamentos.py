@@ -53,8 +53,8 @@ def t_tabela_processamentos(dados):
 
 
     dados = remover_hifen(dados, ["cod_aai", "cod_aai_destino"])
-    dados["data_solicitacao"] = dados["data_solicitacao"].astype(str)
-    dados = adicionando_aspas_duplas(dados, ["none"])
+    #dados["data_solicitacao"] = dados["data_solicitacao"].astype(str)
+    dados = adicionando_aspas_duplas(dados, ["status"])
 
     return dados
 
