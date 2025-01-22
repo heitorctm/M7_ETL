@@ -54,7 +54,7 @@ def t_tabela_processamentos(dados):
         dados, colunas_not_varchar=["data_solicitacao"]
     )
 
-    dados = remover_hifen(dados, novos_nomes)
+    dados = remover_hifen(dados, ["cod_aai"])
 
 
     return dados
