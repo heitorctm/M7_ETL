@@ -1,4 +1,4 @@
-from .auxiliares import (
+from auxiliares import (
     truncar_2_casas,
     acessar_s3,
     mover_arquivo,
