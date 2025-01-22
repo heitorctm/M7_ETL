@@ -15,13 +15,16 @@ def t_tabela_processamentos(dados):
     :return: DataFrame transformado.
     """
 
-    colunas_a_remover = [
-        "Nome Assessor Origem",
-        "Nome Assessor Destino",
-        "Origem Solicitação",
-        "Código Solicitação",
+    colunas_a_ficar = [
+        "Status",
+        "Código Assessor Origem",
+        "Código Assessor Destino",
+        
+        "Data Solicitação",
+        "Data Transferência",
+        "Código do Cliente",
     ]
-    dados = dados.drop(columns=colunas_a_remover)
+    dados = dados[colunas_a_ficar]
     print(dados.head(1))
 
     novos_nomes = [
@@ -35,7 +38,15 @@ def t_tabela_processamentos(dados):
     
     dados.columns = novos_nomes
     dados = remover_hifen(dados, ["cod_aai"])
-
+    nova_ordem = [
+        "cod_xp",
+        "cod_aai",
+        "cod_aai_destino",
+        "data_solicitacao",
+        "data_transferencia",
+        "status"   
+    ]
+    dados = dados[nova_ordem]
 
 
 
