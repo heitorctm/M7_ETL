@@ -27,12 +27,12 @@ def t_tabela_processamentos(dados):
     print(dados.head(1))
     # Renomeia as colunas
     novos_nomes = [
+        "status",
         "cod_xp",
         "cod_aai",
         "cod_aai_destinho",
         "data_solicitacao",
-        "data_transferencia",
-        "status",
+        "data_transferencia"        
     ]
     dados.columns = novos_nomes
     print(3)
