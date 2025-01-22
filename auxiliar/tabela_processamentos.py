@@ -45,9 +45,6 @@ def t_tabela_processamentos(dados):
     dados = dados[nova_ordem]
 
 
-    dados = formatar_colunas_data_transf(
-        dados, colunas_not_varchar=["data_solicitacao"]
-    )
 
     dados = formatar_colunas_data_transf(
         dados, colunas_not_varchar=["data_transferencia"]
