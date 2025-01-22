@@ -17,11 +17,11 @@ def t_tabela_processamentos(dados):
     # Mapeia as colunas originais para os novos nomes
     mapeamento_colunas = {
         "Status": "status",
-        "Código Assessor Origem": "cod_xp",
-        "Código Assessor Destino": "cod_aai",
+        "Código Assessor Origem": "cod_aai",
+        "Código Assessor Destino": "cod_aai_destino",
         "Data Solicitação": "data_solicitacao",
         "Data Transferência": "data_transferencia",
-        "Código do Cliente": "cod_aai_destino",
+        "Código do Cliente": "cod_xp",
     }
 
     # Filtra as colunas necessárias
