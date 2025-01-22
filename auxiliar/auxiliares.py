@@ -269,7 +269,7 @@ def truncar_2_casas(df, colunas=["receita"]):
 
 def substituir_nan_por_zero(df, coluna="receita"):
 
-    df[coluna] = df[coluna].fillna('0')
+    df[coluna] = df[coluna].fillna(0)
 
     return df
 
