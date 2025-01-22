@@ -216,6 +216,13 @@ def formatar_colunas_data_transf(df, colunas_not_varchar):
             df[col] = df[col].where(df[col].notna(), None)
     return df
 
+def adicionar_hifen_colunas_vazias(df, colunas):
+
+    for col in colunas:
+        if col in df.columns:
+            df[col] = df[col].apply(lambda x: "-" if pd.isnull(x) or x == "" else x)
+    return df
+
 
 def formatar_colunas_data_positivador(df, colunas_not_varchar=["data_ref"]):
     for col in colunas_not_varchar:

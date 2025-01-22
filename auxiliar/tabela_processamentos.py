@@ -3,6 +3,7 @@ from auxiliares import (
     remover_hifen,
     adicionando_aspas_duplas,
     formatar_colunas_data_transf,
+    adicionar_hifen_colunas_vazias
 )
 
 
@@ -32,7 +33,8 @@ def t_tabela_processamentos(dados):
     ]
     
     dados.columns = novos_nomes
-    dados["data_solicitacao"] = dados["data_solicitacao"].astype(str)
+
+    adicionar_hifen_colunas_vazias(dados, novos_nomes)
 
     nova_ordem = [
         "cod_xp",
@@ -50,7 +52,7 @@ def t_tabela_processamentos(dados):
         dados, colunas_not_varchar=["data_transferencia"]
     )
 
-    dados = remover_hifen(dados, ["cod_aai", "cod_aai_destino"])
+    dados = remover_hifen(dados, novos_nomes)
 
 
     return dados
