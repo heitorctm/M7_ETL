@@ -30,11 +30,7 @@ def t_corretagem(dados):
     ]
     dados = dados[nova_ordem_colunas]
     # Aplica as transformações
-    print(dados.head(1))
     dados = remover_linhas_sem_data(dados)
-    print(dados.head(1))
-    dados = formatar_colunas_data(dados, colunas_not_varchar=["data_ref", "Data"])
-    print(dados.head(1))
     dados = truncar_2_casas(dados, colunas=["BOV", "Total"])
 
     
