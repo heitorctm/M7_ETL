@@ -31,10 +31,11 @@ def t_corretagem(dados):
     dados = dados[nova_ordem_colunas]
 
     # Aplica as transformações
-    dados = adicionando_aspas_duplas(dados, colunas_not_varchar=["data_ref", "Data"])
     dados = remover_linhas_sem_data(dados)
     dados = remover_letras_coluna(dados, coluna="Cod A")
     dados = truncar_2_casas(dados, colunas=["BOV", "Total"])
+    dados = adicionando_aspas_duplas(dados, colunas_not_varchar=["data_ref", "Data"])
+
     
 
     return dados
