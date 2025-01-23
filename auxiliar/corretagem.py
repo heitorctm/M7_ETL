@@ -15,8 +15,8 @@ def t_corretagem(dados):
     :return: DataFrame transformado.
     """
     # Adiciona coluna 'data_ref' e reorganiza a ordem das colunas
-    dados = dados.astype(str)
     dados["data_ref"] = dados["Data"]
+    dados = dados.astype(str)
     nova_ordem_colunas = [
         "data_ref",
         "Conta",
@@ -32,7 +32,10 @@ def t_corretagem(dados):
     dados = dados[nova_ordem_colunas]
 
     # Aplica as transformações
-
+    dados = remover_linhas_sem_data(dados)
+    dados = truncar_2_casas(dados, colunas=["BOV", "Total"])
+    
+    dados = formatar_colunas_data(dados, colunas_not_varchar=["data_ref", "Data"])
     
 
     return dados
