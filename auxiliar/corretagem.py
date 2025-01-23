@@ -29,7 +29,7 @@ def t_corretagem(dados):
         "Canal",
     ]
     dados = dados[nova_ordem_colunas]
-    dados = dados.astype(str)
+    dados = dados['Cod Matriz'].astype(str)
 
 
     
