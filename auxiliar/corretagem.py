@@ -16,7 +16,6 @@ def t_corretagem(dados):
     """
     # Adiciona coluna 'data_ref' e reorganiza a ordem das colunas
     dados["data_ref"] = dados["Data"]
-    dados = dados.astype(str)
     nova_ordem_colunas = [
         "data_ref",
         "Conta",
