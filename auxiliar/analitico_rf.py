@@ -60,9 +60,6 @@ def t_analitico_rf(dados):
     # Remove letras de colunas específicas
     dados = remover_letras_coluna(dados)
 
-    # Adiciona aspas duplas em colunas não varchar
-    dados = adicionando_aspas_duplas(dados, colunas_not_varchar=["data_ref"])
-
     # Remove as 4 últimas colunas
     dados = deletar_4_ultimas_colunas(dados)
 
