@@ -14,6 +14,7 @@ def t_corretagem(dados):
     :param dados: DataFrame a ser transformado.
     :return: DataFrame transformado.
     """
+    dados = dados.astype(str)
     # Adiciona coluna 'data_ref' e reorganiza a ordem das colunas
     dados["data_ref"] = dados["Data"]
     nova_ordem_colunas = [
@@ -29,9 +30,11 @@ def t_corretagem(dados):
         "Canal",
     ]
     dados = dados[nova_ordem_colunas]
-    dados = dados['Cod Matriz'].astype(str)
+    dados = dados.astype(str)
 
-
+    # Aplica as transformações
+    dados = remover_linhas_sem_data(dados)
+    dados = truncar_2_casas(dados, colunas=["BOV", "Total"])
     
     
 
