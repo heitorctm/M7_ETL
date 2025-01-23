@@ -29,7 +29,7 @@ def t_corretagem(dados):
         "Canal",
     ]
     dados = dados[nova_ordem_colunas]
-
+    dados = adicionando_aspas_duplas(dados, colunas_not_varchar=["data_ref"])
     # Aplica as transformações
     print(dados.head(1))
     dados = remover_linhas_sem_data(dados)
@@ -37,7 +37,6 @@ def t_corretagem(dados):
     dados = formatar_colunas_data(dados, colunas_not_varchar=["data_ref", "Data"])
     print(dados.head(1))
     dados = truncar_2_casas(dados, colunas=["BOV", "Total"])
-    dados = adicionando_aspas_duplas(dados, colunas_not_varchar=["data_ref"])
 
     
 
