@@ -32,9 +32,6 @@ def t_diversificacao(dados):
     # Renomeia colunas
     dados = dados.rename(columns={"Data Posição": "data_ref"})
 
-    # Adiciona uma nova coluna de teste
-    dados["teste"] = 1
-
     # Remove linhas sem data
     dados = remover_linhas_sem_data(dados)
 
