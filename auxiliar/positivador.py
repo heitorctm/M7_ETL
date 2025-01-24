@@ -79,6 +79,16 @@ def t_positivador_s3(dados):
         colunas_not_varchar=["Data Posição", "Data de Cadastro", "Data de Nascimento"],
     )
     dados = dados.rename(columns={"Data Posição": "data_ref"})
+
+    from datetime import date
+
+    hoje = date.today().strftime("%Y-%m.%d")
+
+    dados.to_csv(
+        f"C:/Users/Administrador/Documents/atualizacao_diaria/IMPORT_S3_SQL/BASE/0 - positivador/{hoje}-positivador.csv",
+        index=False,
+    )
+
     return dados
 
 
