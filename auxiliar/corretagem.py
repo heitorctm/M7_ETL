@@ -1,10 +1,12 @@
-from auxiliares import (
+from .auxiliares import (
     truncar_2_casas,
     remover_linhas_sem_data,
     remover_letras_coluna,
     formatar_colunas_data,
     adicionando_aspas_duplas,
+    carregar_arquivo,
 )
+import pandas as pd
 
 
 def t_corretagem(dados):
@@ -15,6 +17,7 @@ def t_corretagem(dados):
     :return: DataFrame transformado.
     """
     # Adiciona coluna 'data_ref' e reorganiza a ordem das colunas
+    carregar_arquivo(dados)
     dados["data_ref"] = dados["Data"]
     nova_ordem_colunas = [
         "data_ref",
@@ -29,14 +32,12 @@ def t_corretagem(dados):
         "Canal",
     ]
     dados = dados[nova_ordem_colunas]
-    
+
     # Aplica as transformações
     dados = remover_linhas_sem_data(dados)
     dados = adicionando_aspas_duplas(dados, colunas_not_varchar=["data_ref"])
     dados = formatar_colunas_data(dados, colunas_not_varchar=["data_ref", "Data"])
     dados = truncar_2_casas(dados, colunas=["BOV", "Total"])
-
-    
 
     return dados
 
