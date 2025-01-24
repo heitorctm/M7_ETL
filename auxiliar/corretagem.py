@@ -4,10 +4,12 @@ from .auxiliares import (
     remover_letras_coluna,
     formatar_colunas_data,
     adicionando_aspas_duplas,
+    carregar_arquivo,
 )
+import pandas as pd
 
 
-def t_corretagaem(dados):
+def t_corretagem(dados):
     """
     Realiza as transformações específicas no DataFrame da tabela `corretagem`.
 
@@ -15,6 +17,10 @@ def t_corretagaem(dados):
     :return: DataFrame transformado.
     """
     # Adiciona coluna 'data_ref' e reorganiza a ordem das colunas
+    dados = carregar_arquivo(dados)
+    print(dados)
+    print(dados.head())
+    dados = remover_linhas_sem_data(dadoss)
     dados["data_ref"] = dados["Data"]
     nova_ordem_colunas = [
         "data_ref",
@@ -31,7 +37,7 @@ def t_corretagaem(dados):
     dados = dados[nova_ordem_colunas]
 
     # Aplica as transformações
-    dados = remover_linhas_sem_data(dados)
+
     dados = remover_letras_coluna(dados, coluna="Cod A")
     dados = formatar_colunas_data(dados, colunas_not_varchar=["data_ref", "Data"])
     dados = truncar_2_casas(dados, colunas=["BOV", "Total"])
