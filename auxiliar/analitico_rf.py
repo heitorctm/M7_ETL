@@ -4,6 +4,7 @@ from auxiliares import (
     remover_letras_coluna,
     adicionando_aspas_duplas,
     remover_linhas_nan,
+    formatar_colunas_data,
 )
 
 
@@ -61,6 +62,7 @@ def t_analitico_rf(dados):
     dados = remover_letras_coluna(dados)
 
     # Adiciona aspas duplas em colunas não varchar
+    dados = formatar_colunas_data(dados)
     dados = adicionando_aspas_duplas(dados, colunas_not_varchar=["data_ref"])
 
     # Remove as 4 últimas colunas
