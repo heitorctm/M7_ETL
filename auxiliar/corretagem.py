@@ -4,7 +4,6 @@ from auxiliares import (
     remover_letras_coluna,
     formatar_colunas_data,
 )
-import pandas as pd
 from datetime import date
 
 
