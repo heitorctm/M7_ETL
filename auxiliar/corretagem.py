@@ -16,7 +16,6 @@ def t_corretagem(dados):
     :return: DataFrame transformado.
     """
 
-    dados = pd.read_excel(dados, index_col=False, dtype=str)
     dados["data_ref"] = dados["Data"]
 
     nova_ordem_colunas = [
