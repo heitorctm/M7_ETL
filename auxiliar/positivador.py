@@ -87,6 +87,7 @@ def t_positivador_s3(dados):
     dados.to_csv(
         f"C:/Users/Administrador/Documents/atualizacao_diaria/IMPORT_S3_SQL/BASE/0 - positivador/{hoje}-positivador.csv",
         index=False,
+        encoding="utf-8",
     )
 
     return dados
