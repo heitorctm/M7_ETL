@@ -48,6 +48,5 @@ def processar_tabela_corretagem(dados):
     :param dados: DataFrame recebido diretamente do nó KNIME.
     :return: DataFrame processado.
     """
-    # Chama a função de processamento principal
     dados_processados = t_corretagem(dados)
     return dados_processados
