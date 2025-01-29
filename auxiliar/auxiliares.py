@@ -280,7 +280,9 @@ def substituir_nan_por_zero(df, coluna="receita"):
 
 def remover_linhas_nan(df, coluna):
     df[coluna] = df[coluna].replace(r"^\s*$", float("NaN"), regex=True)
+    
     df = df.dropna(subset=[coluna])
+
     return df
 
 
