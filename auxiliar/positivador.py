@@ -2,6 +2,7 @@ from auxiliares import (
     truncar_2_casas,
     remover_letras_coluna,
     formatar_colunas_data_positivador,
+    formatar_colunas_data
 )
 
 
@@ -74,7 +75,7 @@ def t_positivador_s3(dados):
             "Receita Aluguel",
         ],
     )
-    dados = formatar_colunas_data_positivador(
+    dados = formatar_colunas_data(
         dados,
         colunas_not_varchar=["Data Posição", "Data de Cadastro", "Data de Nascimento"],
     )
