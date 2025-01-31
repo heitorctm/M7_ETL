@@ -5,6 +5,7 @@ from auxiliares import (
     adicionando_aspas_duplas,
     remover_linhas_nan,
     formatar_colunas_data,
+    remover_linhas_nan,
 )
 
 
@@ -53,7 +54,7 @@ def t_analitico_rf(dados):
         "preco_tmr",
     ]
     dados = dados.rename(columns=dict(zip(dados.columns, novo_nome_colunas)))
-
+    dados = remover_linhas_nan(dados,'cod_xp')
     # Remove linhas sem data e colunas nulas
     dados = remover_linhas_sem_data(dados)
     dados = remover_linhas_nan(dados, coluna="cod_xp")
