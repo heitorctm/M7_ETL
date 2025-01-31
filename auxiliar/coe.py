@@ -3,6 +3,7 @@ from auxiliares import (
     remover_linhas_sem_data,
     remover_letras_coluna,
     adicionando_aspas_duplas,
+    formatar_colunas_data
 )
 
 
@@ -50,6 +51,7 @@ def t_coe(dados):
             "Data Vencimento",
         ],
     )
+    dados = formatar_colunas_data(dados)
 
     return dados
 
