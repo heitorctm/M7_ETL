@@ -3,6 +3,7 @@ from auxiliares import (
     remover_linhas_sem_data,
     remover_letras_coluna,
     adicionando_aspas_duplas_positivador,
+    formatar_colunas_data
 )
 
 
@@ -49,7 +50,7 @@ def t_diversificacao(dados):
             else x
         )
     )
-
+    dados = formatar_colunas_data(dados)
     # Adiciona aspas duplas em colunas não varchar
     dados = adicionando_aspas_duplas_positivador(
         dados, colunas_not_varchar=["data_ref"]
