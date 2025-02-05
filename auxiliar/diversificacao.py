@@ -3,7 +3,7 @@ from auxiliares import (
     remover_linhas_sem_data,
     remover_letras_coluna,
     adicionando_aspas_duplas,
-    formatar_colunas_data
+    formatar_colunas_data_positivador
 )
 
 
@@ -41,7 +41,7 @@ def t_diversificacao(dados):
 
     # Trunca valores em 2 casas decimais
     dados = truncar_2_casas(dados, colunas=["NET"])
-
+    dados = formatar_colunas_data_positivador(dados)
     # Aplica tratamento para codificação de strings
     dados = dados.applymap(
         lambda x: (
@@ -50,7 +50,7 @@ def t_diversificacao(dados):
             else x
         )
     )
-    dados = formatar_colunas_data(dados)
+    
     # Adiciona aspas duplas em colunas não varchar
     dados = adicionando_aspas_duplas(
         dados, colunas_not_varchar=["data_ref"]
