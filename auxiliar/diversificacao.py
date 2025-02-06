@@ -1,11 +1,14 @@
 from auxiliares import (
-    truncar_2_casas,
-    remover_linhas_sem_data,
+    formatar_colunas_data,
     remover_letras_coluna,
-    adicionando_aspas_duplas,
-    formatar_colunas_data_positivador
+    truncar_2_casas,
+    formatar_colunas_data,
+    
 )
 
+
+from datetime import datetime
+import pandas as pd
 
 def t_diversificacao(dados):
     """
@@ -13,8 +16,12 @@ def t_diversificacao(dados):
     :param dados: DataFrame a ser transformado.
     :return: DataFrame transformado.
     """
+    # Adiciona a coluna 'Data_Processamento' com a data de hoje como a primeira coluna
+    dados.insert(0, "Data_Processamento", datetime.today().strftime('%Y-%m-%d'))
+
     # Reorganiza as colunas na ordem desejada
     nova_ordem_colunas = [
+        "Data_Processamento",
         "Data Posição",
         "Assessor",
         "Cliente",
@@ -31,17 +38,39 @@ def t_diversificacao(dados):
     dados = dados[nova_ordem_colunas]
 
     # Renomeia colunas
-    dados = dados.rename(columns={"Data Posição": "data_ref"})
+    dados = dados.rename(columns={
+        "Data Posição": "data_ref",
+        "Sub Produto": "Sub_Produto",
+        "Produto em Garantia": "Produto_em_Garantia",
+        "CNPJ Fundo": "CNPJ_Fundo",
+        "Data de Vencimento": "Data_de_Vencimento"
+    })
+    
+    # Converte CNPJ para string e remove .0
+    dados['CNPJ_Fundo'] = dados['CNPJ_Fundo'].astype(str).str.replace('.0', '', regex=False)
 
-    # Remove linhas sem data
-    dados = remover_linhas_sem_data(dados)
+    # Normaliza a coluna de data 'data_ref'
+    dados['data_ref'] = pd.to_datetime(
+        dados['data_ref'], 
+        format='%d/%m/%Y',  # Ajuste para o formato correto
+        errors='coerce'  # Transforma valores inválidos em NaT
+    ).dt.strftime('%Y-%m-%d')  # Converte para o formato desejado
 
     # Remove letras de uma coluna específica
     dados = remover_letras_coluna(dados, coluna="Assessor")
 
     # Trunca valores em 2 casas decimais
     dados = truncar_2_casas(dados, colunas=["NET"])
-    dados = formatar_colunas_data_positivador(dados)
+
+    # Remover tabulações, quebras de linha, vírgulas e espaços das colunas "Ativo" e "Emissor"
+    for coluna in ["Ativo", "Emissor"]:
+        dados[coluna] = (
+            dados[coluna]
+            .astype(str)
+            .str.replace(r'[\t\n\r,]', '', regex=True)  # Remove tabulações, quebras de linha e vírgulas
+            .str.strip()  # Remove espaços no início e no fim
+        )
+
     # Aplica tratamento para codificação de strings
     dados = dados.applymap(
         lambda x: (
@@ -50,21 +79,11 @@ def t_diversificacao(dados):
             else x
         )
     )
-    
-    # Adiciona aspas duplas em colunas não varchar
-    dados = adicionando_aspas_duplas(
-        dados, colunas_not_varchar=["data_ref"]
+
+    # Formata a coluna de vencimento
+    dados = formatar_colunas_data(
+        dados, colunas_not_varchar=["Data_de_Vencimento"]
     )
 
     return dados
 
-
-def processar_tabela_diversificacao(dados):
-    """
-    Função principal que processa os dados da tabela.
-    :param dados: DataFrame recebido diretamente.
-    :return: DataFrame processado.
-    """
-    # Chama a função de processamento principal
-    dados_processados = t_diversificacao(dados)
-    return dados_processados
