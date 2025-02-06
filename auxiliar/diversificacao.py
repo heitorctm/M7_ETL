@@ -16,12 +16,9 @@ def t_diversificacao(dados):
     :param dados: DataFrame a ser transformado.
     :return: DataFrame transformado.
     """
-    # Adiciona a coluna 'Data_Processamento' com a data de hoje como a primeira coluna
-    dados.insert(0, "Data_Processamento", datetime.today().strftime('%Y-%m-%d'))
 
     # Reorganiza as colunas na ordem desejada
     nova_ordem_colunas = [
-        "Data_Processamento",
         "Data Posição",
         "Assessor",
         "Cliente",
