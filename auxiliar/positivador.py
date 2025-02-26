@@ -75,7 +75,7 @@ def t_positivador_s3(dados):
             "Receita Aluguel",
         ],
     )
-    dados = formatar_colunas_data(
+    dados = formatar_colunas_data_positivador(
         dados,
         colunas_not_varchar=["Data Posição", "Data de Cadastro", "Data de Nascimento"],
     )
