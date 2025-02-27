@@ -77,7 +77,13 @@ def t_positivador_s3(dados):
     )
     dados = formatar_colunas_data(
         dados,
-        colunas_not_varchar=["Data Posição", "Data de Cadastro", "Data de Nascimento"],
+        colunas_not_varchar=["Data Posição", "Data de Nascimento"],
+    )
+    dados = dados.rename(columns={"Data Posição": "data_ref"})
+    
+    dados = formatar_colunas_data_positivador(
+        dados,
+        colunas_not_varchar=["Data de Cadastro"],
     )
     dados = dados.rename(columns={"Data Posição": "data_ref"})
 
