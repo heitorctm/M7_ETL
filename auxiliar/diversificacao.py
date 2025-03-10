@@ -36,7 +36,7 @@ def t_diversificacao(dados):
 
     # Renomeia colunas
     dados = dados.rename(columns={
-        "Data": "data_ref",
+        "Data Posição": "data_ref",
         "Sub Produto": "Sub_Produto",
         "Produto em Garantia": "Produto_em_Garantia",
         "CNPJ Fundo": "CNPJ_Fundo",
