@@ -19,7 +19,7 @@ def t_diversificacao(dados):
 
     # Reorganiza as colunas na ordem desejada
     nova_ordem_colunas = [
-        "Data",
+        "Data Posição",
         "Assessor",
         "Cliente",
         "Produto",
