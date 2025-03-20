@@ -39,9 +39,5 @@ def t_corretagem(dados):
 
     hoje = date.today().strftime("%Y-%m.%d")
 
-    dados.to_csv(
-        f"C:/Users/Administrador/Documents/atualizacao_diaria/IMPORT_S3_SQL/BASE/1 - corretagem/{hoje}-corretagem.csv",
-        index=False,
-    )
 
     return dados
